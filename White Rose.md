@@ -1,6 +1,6 @@
 *****
 
-![[Pasted image 20250203213856.png]] 
+![Imagen1](attachments/Pasted image 20250203213856.png)
 
 #easy
 
