@@ -1,6 +1,10 @@
 *****
 
+<<<<<<< HEAD
 ![Imagen1](attachments/Pasted image 20250203213856.png) 
+=======
+![Imagen1](attachments/Pasted%20image%2020250203213856.png)
+>>>>>>> f07ddfc43da473dc713c7a25c20948602b0c1453
 
 #easy
 
@@ -20,7 +24,7 @@ Realizamos un escaneo con **Nmap** para poder observar los servicios que usan:
 sudo nmap -sS --min-rate 5000 --open -vv -p- -n -Pn whiterose.thm
 ~~~
 
-![[Pasted image 20250203214511.png]]
+![Imagen1](attachments/Pasted%20image%20250203214511.png)
 
 Como podemos ver, tienen el `22` y `80` abiertos. Al ingresar a la pagina web esta nos redirige a otra:
 
