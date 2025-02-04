@@ -1,11 +1,5 @@
-*****
 
-<<<<<<< HEAD
-![Imagen1](attachments/Pasted image 20250203213856.png) 
-=======
 ![Imagen1](attachments/Pasted%20image%2020250203213856.png)
->>>>>>> f07ddfc43da473dc713c7a25c20948602b0c1453
-
 #easy
 
 ******
