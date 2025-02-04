@@ -1,5 +1,6 @@
+*****
 
-![Imagen1](attachments/Pasted%20image%2020250203213856.png)
+![Imagen1](attachments/Pasted%20image%2020250203213856.png) 
 
 #easy
 
@@ -19,13 +20,13 @@ Realizamos un escaneo con **Nmap** para poder observar los servicios que usan:
 sudo nmap -sS --min-rate 5000 --open -vv -p- -n -Pn whiterose.thm
 ~~~
 
-![Imagen1](attachments/Pasted%20image%20250203214511.png)
+![imagen2](<attachments/Pasted%20image%2020250203214511.png>)
 
 Como podemos ver, tienen el `22` y `80` abiertos. Al ingresar a la pagina web esta nos redirige a otra:
 
 `cyprusbank.thm`
 
-![[Pasted image 20250203214630.png]]
+![image3](<attachments/Pasted%20image%2020250203214630.png>)
 
 Pasamos a realizar un fuzzing de directorios con gobuster, pero no nos muestra nada interesante.
 
@@ -41,7 +42,7 @@ Con ffuf realizamos fuzzing de subdominios y vemos que nos dan 2 subdominios:
 ffuf -u 'http://cyprusbank.thm/' -H "Host: FUZZ.cyprusbank.thm" -w /usr/share/SecLists/Discovery/DNS/subdomains-top1million-5000.txt -fw 1
 ~~~
 
-![[Pasted image 20250203215214.png]]
+![alt text](<attachments/Pasted%20image%2020250203215214.png>)
 
 >[!note]
 >`-fw` nos ayuda a descartar falsos positivos en el fuzzing
